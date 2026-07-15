@@ -70,7 +70,8 @@ Each phase ends with something that runs. Check off items as they complete.
 - Payment is stubbed: "Start ₹5 Trial" activates the trial without charging. Razorpay (Phase 8) needs the owner's Razorpay account.
 
 ## Phase 9 — Build + release
-- [ ] EAS Build config (development build first — required for native Firebase)
+- [x] EAS Build config (project linked: d10507f5-b7d7-4215-919e-bd9d8d035072; preview APK built 15 Jul 2026)
+- [ ] Add signing SHA-1/SHA-256 to Firebase Android app (required for OTP on device)
 - [ ] Owner installs dev build on Android phone and tests OTP with test number
 - [ ] Firestore security rules locked down
 - [ ] Production build → Play Store guidance
