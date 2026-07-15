@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="hi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GroBro UI Preview</title>
+    <style>
+      :root {
+        --bg: #f5f2ff;
+        --surface: #fff;
+        --purple: #6d2bf2;
+        --purple-dark: #250063;
+        --text: #1f1a33;
+        --muted: #6e678a;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: radial-gradient(circle at top right, #ebdcff, #f9f7ff 48%);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", sans-serif;
+        color: var(--text);
+      }
+
+      .phone {
+        width: min(100vw, 430px);
+        height: min(100vh, 920px);
+        border-radius: 30px;
+        overflow: hidden;
+        background: var(--bg);
+        border: 1px solid #e2daf9;
+        box-shadow: 0 20px 56px rgba(31, 8, 74, 0.2);
+        position: relative;
+      }
+
+      .screen-wrap {
+        height: calc(100% - 78px);
+      }
+
+      .screen {
+        display: none;
+        height: 100%;
+        overflow-y: auto;
+      }
+
+      .screen.active {
+        display: block;
+      }
+
+      .screenshot-screen {
+        position: relative;
+        background: #fff;
+      }
+
+      .reference-image {
+        width: 100%;
+        height: calc(100% + 80px);
+        object-fit: cover;
+        object-position: top center;
+        display: block;
+        user-select: none;
+        -webkit-user-drag: none;
+      }
+
+      /* Hide screenshot's original bottom tab so we can use new nav with Profile */
+      .tab-mask {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 84px;
+        background: #fff;
+      }
+
+      .profile-screen {
+        background: var(--bg);
+      }
+
+      .top-gradient {
+        background: linear-gradient(160deg, #1f0256 0%, #43089b 56%, #6e2dff 100%);
+        color: #fff;
+        padding: 34px 16px 16px;
+      }
+
+      .row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .logo {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.7);
+        display: grid;
+        place-items: center;
+        font-weight: 800;
+      }
+
+      .brand h1 {
+        margin: 0;
+        font-size: 30px;
+        line-height: 1;
+      }
+
+      .brand small {
+        opacity: 0.9;
+        letter-spacing: 0.7px;
+      }
+
+      .icon-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.52);
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff;
+      }
+
+      .profile-card {
+        margin: 14px;
+        margin-top: -8px;
+        border-radius: 18px;
+        border: 1px solid #e6ddff;
+        background: #fff;
+        padding: 16px;
+        box-shadow: 0 12px 28px rgba(56, 17, 126, 0.12);
+      }
+
+      .avatar {
+        width: 76px;
+        height: 76px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-size: 30px;
+        background: #f4edff;
+        border: 3px solid #dbc8ff;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .stats {
+        margin-top: 14px;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .stat {
+        border: 1px solid #e6dcff;
+        background: #f6f0ff;
+        border-radius: 12px;
+        text-align: center;
+        padding: 10px 6px;
+      }
+
+      .stat b {
+        display: block;
+        color: var(--purple);
+        font-size: 20px;
+      }
+
+      .menu {
+        margin-top: 12px;
+        display: grid;
+        gap: 8px;
+      }
+
+      .menu-item {
+        border: 1px solid #ebe4ff;
+        border-radius: 12px;
+        background: #fff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px;
+      }
+
+      .bottom-nav {
+        position: absolute;
+        left: 8px;
+        right: 8px;
+        bottom: 8px;
+        height: 62px;
+        border-radius: 22px;
+        border: 1px solid #e6deff;
+        background: #fff;
+        box-shadow: 0 9px 18px rgba(56, 15, 134, 0.14);
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        z-index: 10;
+      }
+
+      .tab-btn {
+        border: none;
+        background: transparent;
+        color: #6f688d;
+        font-size: 12px;
+        font-weight: 700;
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+      }
+
+      .tab-btn svg {
+        width: 22px;
+        height: 22px;
+        margin-bottom: 2px;
+      }
+
+      .tab-btn.active {
+        color: var(--purple);
+      }
+
+      .tab-btn.active svg path {
+        stroke: var(--purple);
+      }
+
+      button:focus-visible {
+        outline: 2px solid #8f67ff;
+        outline-offset: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="phone">
+      <div class="screen-wrap">
+        <section id="screen-home" class="screen screenshot-screen active" aria-label="Home screen">
+          <img class="reference-image" src="./Homep Page.png" alt="GroBro home reference" />
+          <div class="tab-mask" aria-hidden="true"></div>
+        </section>
+
+        <section id="screen-videos" class="screen screenshot-screen" aria-label="Videos screen">
+          <img class="reference-image" src="./Videos Main page.png" alt="GroBro videos reference" />
+          <div class="tab-mask" aria-hidden="true"></div>
+        </section>
+
+        <section id="screen-profile" class="screen profile-screen" aria-label="Profile screen">
+          <header class="top-gradient">
+            <div class="row">
+              <div class="brand">
+                <div class="logo">G</div>
+                <div>
+                  <h1>GroBro</h1>
+                  <small>GROW TOGETHER</small>
+                </div>
+              </div>
+              <button class="icon-btn" aria-label="Settings">⚙️</button>
+            </div>
+            <h2 style="margin: 12px 0 0; font-size: 36px">Profile</h2>
+            <p style="margin: 4px 0 0; opacity: 0.9">आपकी सीखने की प्रगति और सेटिंग्स</p>
+          </header>
+
+          <article class="profile-card">
+            <div class="row" style="justify-content: flex-start">
+              <div class="avatar">👤</div>
+              <div>
+                <h3 style="margin: 0">Ravi Kumar</h3>
+                <p class="muted" style="margin: 4px 0 0">ravi@example.com</p>
+              </div>
+            </div>
+
+            <div class="stats">
+              <div class="stat">
+                <b>18</b>
+                <small>Videos Watched</small>
+              </div>
+              <div class="stat">
+                <b>6</b>
+                <small>Ideas Saved</small>
+              </div>
+              <div class="stat">
+                <b>2</b>
+                <small>Plans Started</small>
+              </div>
+            </div>
+
+            <div class="menu">
+              <div class="menu-item"><span>Saved Videos</span><b>›</b></div>
+              <div class="menu-item"><span>Language (Hindi)</span><b>›</b></div>
+              <div class="menu-item"><span>My Trial & Billing</span><b>›</b></div>
+              <div class="menu-item"><span>Help & Support</span><b>›</b></div>
+              <div class="menu-item"><span>Logout</span><b>›</b></div>
+            </div>
+          </article>
+        </section>
+      </div>
+
+      <nav class="bottom-nav" aria-label="Bottom navigation">
+        <button class="tab-btn active" data-tab="home" aria-label="Open Home">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 10.5L12 4L20 10.5V20H4V10.5Z" stroke="#6f688d" stroke-width="1.7" />
+          </svg>
+          Home
+        </button>
+        <button class="tab-btn" data-tab="videos" aria-label="Open Videos">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 5H20V19H4V5Z" stroke="#6f688d" stroke-width="1.7" />
+            <path d="M10 9L15 12L10 15V9Z" stroke="#6f688d" stroke-width="1.7" />
+          </svg>
+          Videos
+        </button>
+        <button class="tab-btn" data-tab="profile" aria-label="Open Profile">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 12C14.2 12 16 10.2 16 8C16 5.8 14.2 4 12 4C9.8 4 8 5.8 8 8C8 10.2 9.8 12 12 12Z" stroke="#6f688d" stroke-width="1.7" />
+            <path d="M5 20C5.8 16.8 8.3 15 12 15C15.7 15 18.2 16.8 19 20" stroke="#6f688d" stroke-width="1.7" />
+          </svg>
+          Profile
+        </button>
+      </nav>
+    </main>
+
+    <script>
+      const tabs = ["home", "videos", "profile"];
+      const screenMap = {
+        home: document.getElementById("screen-home"),
+        videos: document.getElementById("screen-videos"),
+        profile: document.getElementById("screen-profile"),
+      };
+
+      function openTab(tab) {
+        tabs.forEach((key) => {
+          screenMap[key].classList.toggle("active", key === tab);
+        });
+        document.querySelectorAll(".tab-btn").forEach((btn) => {
+          btn.classList.toggle("active", btn.dataset.tab === tab);
+        });
+      }
+
+      document.querySelectorAll(".tab-btn").forEach((btn) => {
+        btn.addEventListener("click", () => openTab(btn.dataset.tab));
+      });
+    </script>
+  </body>
+</html>
