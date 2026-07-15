@@ -38,6 +38,13 @@
           }
         }
       ]
-    ]
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "d10507f5-b7d7-4215-919e-bd9d8d035072"
+      }
+    },
+    "owner": "openrootais-team"
   }
 }
