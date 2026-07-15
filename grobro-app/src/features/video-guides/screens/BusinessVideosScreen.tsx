@@ -1,5 +1,7 @@
 import { View, Text, FlatList } from "react-native";
+import { useEffect } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { analyticsService } from "@/services/analytics/analyticsService";
 import { DetailHeader } from "@/shared/components/DetailHeader";
 import {
   LoadingView,
@@ -13,6 +15,10 @@ export function BusinessVideosScreen() {
   const router = useRouter();
   const { id, title } = useLocalSearchParams<{ id: string; title?: string }>();
   const { data: videos, loading, error, refetch } = useVideos(id);
+
+  useEffect(() => {
+    analyticsService.track("business_opened", { businessId: id });
+  }, [id]);
 
   return (
     <View className="flex-1 bg-bg">

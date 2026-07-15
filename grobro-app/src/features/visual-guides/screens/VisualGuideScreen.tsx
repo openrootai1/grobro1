@@ -1,5 +1,7 @@
 import { View, Text, ScrollView, Image } from "react-native";
+import { useEffect } from "react";
 import { useLocalSearchParams } from "expo-router";
+import { analyticsService } from "@/services/analytics/analyticsService";
 import { DetailHeader } from "@/shared/components/DetailHeader";
 import {
   LoadingView,
@@ -11,6 +13,10 @@ import { useVisualGuide } from "../hooks/useVisualGuide";
 export function VisualGuideScreen() {
   const { id, title } = useLocalSearchParams<{ id: string; title?: string }>();
   const { data: guide, loading, error, refetch } = useVisualGuide(id);
+
+  useEffect(() => {
+    analyticsService.track("visual_guide_opened", { businessId: id });
+  }, [id]);
 
   return (
     <View className="flex-1 bg-bg">

@@ -4,6 +4,7 @@ import {
   type OtpConfirmation,
 } from "@/services/firebase/authService";
 import { userService } from "@/services/firebase/userService";
+import { analyticsService } from "@/services/analytics/analyticsService";
 
 type Step = "phone" | "otp";
 
@@ -26,6 +27,7 @@ export function useOtpLogin() {
     setLoading(true);
     setError(null);
     try {
+      analyticsService.track("otp_started");
       const result = await authService.sendOtp(`+91${digits}`);
       setConfirmation(result);
       setStep("otp");
@@ -45,6 +47,7 @@ export function useOtpLogin() {
     setError(null);
     try {
       const user = await authService.verifyOtp(confirmation, code.trim());
+      analyticsService.track("otp_verified");
       await userService.upsertUser(user);
       // Root layout redirects automatically once auth state updates
     } catch (e) {
