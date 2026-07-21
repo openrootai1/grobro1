@@ -5,6 +5,7 @@
     "version": "1.0.0",
     "scheme": "grobro",
     "orientation": "portrait",
+    "newArchEnabled": false,
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "ios": {
