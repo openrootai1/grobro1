@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import { useEffect } from "react";
 import { useLocalSearchParams } from "expo-router";
-import { Video as ExpoVideo, ResizeMode } from "expo-av";
+import { VideoView, useVideoPlayer } from "expo-video";
 import { DetailHeader } from "@/shared/components/DetailHeader";
 import { EmptyView } from "@/shared/components/StatusViews";
 import { analyticsService } from "@/services/analytics/analyticsService";
@@ -18,16 +18,20 @@ export function VideoPlayerScreen() {
     }
   }, [videoUrl, title]);
 
+  const player = useVideoPlayer(videoUrl ?? null, (instance) => {
+    instance.loop = false;
+    instance.play();
+  });
+
   return (
     <View className="flex-1 bg-bg">
       <DetailHeader title={title ?? "Video"} />
       {videoUrl ? (
         <>
-          <ExpoVideo
-            source={{ uri: videoUrl }}
-            useNativeControls
-            resizeMode={ResizeMode.CONTAIN}
-            shouldPlay
+          <VideoView
+            player={player}
+            nativeControls
+            contentFit="contain"
             style={{ width: "100%", aspectRatio: 16 / 9, backgroundColor: "#000" }}
           />
           <Text className="text-ink font-bold px-4 mt-4 text-base">

@@ -1,5 +1,3 @@
-import { getAnalytics, logEvent } from "@react-native-firebase/analytics";
-
 export type AnalyticsEvent =
   | "app_opened"
   | "otp_started"
@@ -18,8 +16,13 @@ export type AnalyticsEvent =
   | "support_submitted";
 
 export const analyticsService = {
-  track(event: AnalyticsEvent, params?: Record<string, string>): void {
-    // Fire-and-forget: analytics must never break the app flow
-    logEvent(getAnalytics(), event, params).catch(() => {});
+  /**
+   * Analytics is deliberately inert until the Android app is stable.
+   * Importing the native Firebase Analytics module at startup can crash
+   * Expo standalone builds. The event call sites are retained so the
+   * integration can be restored without changing product flows.
+   */
+  track(_event: AnalyticsEvent, _params?: Record<string, string>): void {
+    // no-op
   },
 };
