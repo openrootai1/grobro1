@@ -32,7 +32,12 @@ export function useOtpLogin() {
       setConfirmation(result);
       setStep("otp");
     } catch (e) {
-      setError("OTP भेजने में समस्या हुई। दोबारा कोशिश करें।");
+      const detail = e instanceof Error ? e.message : "";
+      setError(
+        detail
+          ? `OTP भेजने में समस्या हुई।\n${detail}`
+          : "OTP भेजने में समस्या हुई। दोबारा कोशिश करें।"
+      );
     } finally {
       setLoading(false);
     }
